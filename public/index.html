@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
+        <link rel="stylesheet" href="javascripts/jquery-ui-1.11.4/jquery-ui.css" type="text/css">
+        <link rel="stylesheet" href="javascripts/jquery-ui-1.11.4/jquery-ui.css" type="text/css"/>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script type="text/javascript" src="javascripts/jquery-2.1.4.js"></script>
+        <script type="text/javascript" src="javascripts/jquery-ui-1.11.4/jquery-ui.js"></script>
+
+        <script>
+            $(function() {
+                $( ".ui-widget-content" ).draggable();
+            });
+        </script>
+    </head>
+    <body>
+        <div>blaa</div>
+        <div id="createtodoarea">
+            <form>
+                <input type="text" name="addtodonamefield" value="Add note" />
+                <input type="submit" value="add TODO" name="createtodobutton" />
+            </form>
+        </div>
+        <script>
+            
+        </script>
+        <div id="todolistsarea">
+            <div id="draggable1" class="ui-widget-content">
+                <p>name of list</p>
+                <p>todo1<input  type="checkbox" name="doneflag" value="ON" ></p>
+                
+                <ul id="result">
+                    
+                </ul>
+            </div>
+            
+            <div ng-app="">
+ 
+                <p>Input something in the input box:</p>
+                <p>Name: <input type="text" ng-model="name"></p>
+                <p ng-bind="name"></p>
+
+            </div>
+        </div>
+    </body>
+</html>

@@ -32,8 +32,56 @@ app.get('/getPublicList', function (req, res) {
     listAccessDBDriver.findAll('list', function(error, objs) {
         if (error) { 
             res.status(400).send(error); 
-        } else {
-            res.status(200).send(objs); 
+        } else if ( res.statusCode===200){
+//            //res.status(200).send(objs); 
+//            
+
+//            res.status(200).send(html); 
+var todolists='';
+            for(var i in objs){
+                console.log(objs[i]._id);
+            
+                todolists+='<div id='+objs[i]._id+' class="ui-widget-content">'+
+                                    '<p>'+objs[i]._id+'</p>'+
+                          '</div>';
+            }
+            var myhtml = ['<!DOCTYPE html>',
+                     '<html>',
+                       '<head>',
+                            '<title>TODO supply a title</title>',
+                            '<meta charset="UTF-8">',
+                            '<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+                            '<link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>',
+                            '<link rel="stylesheet" href="javascripts/jquery-ui-1.11.4/jquery-ui.css" type="text/css">',
+                            '<link rel="stylesheet" href="javascripts/jquery-ui-1.11.4/jquery-ui.css" type="text/css"/>',
+                            '<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>',
+                            '<script type="text/javascript" src="javascripts/jquery-2.1.4.js"></script>',
+                            '<script type="text/javascript" src="javascripts/jquery-ui-1.11.4/jquery-ui.js"></script>',
+
+                            '<script>',
+                                '$(function() {',
+                                    '$( ".ui-widget-content" ).draggable();',
+                                '});',
+                            '</script>',
+                       '</head>',
+                       '<body>',
+                       '<div id="todolistsarea">',
+  
+                            todolists,
+                                
+                                '<p>','todo1<input  type="checkbox" name="doneflag" value="ON" ></p>',
+                
+                                
+                            
+                            
+                        '</div>',
+                       '</body>',
+                     '</html>'
+                    ];
+            res.write
+                   (myhtml.join('')
+                   );
+            res.end();
         }
     });
 });

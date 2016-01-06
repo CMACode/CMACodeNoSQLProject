@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>TODO APP CMACode</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
@@ -12,39 +12,23 @@
         <script type="text/javascript" src="javascripts/jquery-ui-1.11.4/jquery-ui.js"></script>
 
         <script>
-            $(function() {
-                $( ".ui-widget-content" ).draggable();
-            });
+            function test1(){
+                alert("drin");
+                var toMove = document.getElementById("test");
+                document.getElementById("b").appendChild(toMove);
+            };
         </script>
     </head>
     <body>
-        <div>blaa</div>
-        <div id="createtodoarea">
-            <form>
-                <input type="text" name="addtodonamefield" value="Add note" />
-                <input type="submit" value="add TODO" name="createtodobutton" />
-            </form>
+        <H1>Welcome To CMACode TODO Organization Tool</H1>
+        <a href="/getAllLists"><button>START</button></a>
+        <a href="/getAllLists/1"><button>START as User 1</button></a>
+        <a href="/getAllLists/2"><button>START as User 2</button></a>
+        <div id="a" style="border: 1px solid black; height:300px;">
+            <p onclick="test1()">text<input id="test"  type="checkbox" name="doneflag" value="0N" onchange="test1()" style="width: 300px"/></p>
         </div>
-        <script>
+        <div id="b" style="border: 1px solid red; height:300px;">
             
-        </script>
-        <div id="todolistsarea">
-            <div id="draggable1" class="ui-widget-content">
-                <p>name of list</p>
-                <p>todo1<input  type="checkbox" name="doneflag" value="ON" ></p>
-                
-                <ul id="result">
-                    
-                </ul>
-            </div>
-            
-            <div ng-app="">
- 
-                <p>Input something in the input box:</p>
-                <p>Name: <input type="text" ng-model="name"></p>
-                <p ng-bind="name"></p>
-
-            </div>
         </div>
     </body>
 </html>

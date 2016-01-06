@@ -105,7 +105,10 @@ app.get('/getAllLists', function (req, res) {
                 todolists+='</div>';
                 todoListsForSelection += '<option>' + objs[i]['name'] + '</option>';
             }
+            var dayname= new Array("So","Mo","Di","Mi","Do","Fr","Sa");
+            var monthname= new Array("Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
             var datum = new Date();
+            datum = dayname[datum.getDay()]+", "+datum.getDate()+"."+monthname[datum.getMonth()];
             var chckbxID='';
             var myhtml = ['<!DOCTYPE html>',
                 '<html>',
@@ -120,9 +123,9 @@ app.get('/getAllLists', function (req, res) {
                 '<script type="text/javascript" src="javascripts/jquery-2.1.4.js"></script>',
                 '<script type="text/javascript" src="javascripts/jquery-ui-1.11.4/jquery-ui.js"></script>',
                 '<script>',
-                '$(function() {',
-                    '$( ".ui-widget-content" ).draggable();',
-                '});',
+//                '$(function() {',
+//                    '$( ".ui-widget-content" ).draggable();',
+//                '});',
                 '$(function() {',
                     '$( ".ui-widget-content2" ).draggable();',
                 '});',
@@ -167,9 +170,9 @@ app.get('/getAllLists', function (req, res) {
                 '</div>',
                 '<div id="todolistsarea">',
                 '<div id="dailyTodoList" class="ui-widget-content"><p>'+datum+'</p></div>',
-                '<div id="privateBacklogList" class="ui-widget-content"><p>private backlog</p></div>',
-                '<div id="einkaufenList" class="ui-widget-content"><p>Einkaufen</p></div>',
-                '<div id="workBacklogList" class="ui-widget-content"><p>work backlog</p></div>',
+                '<div id="privateBacklogList" class="own"><p>private backlog</p></div>',
+                '<div id="einkaufenList" class="own"><p>Einkaufen</p></div>',
+                '<div id="workBacklogList" class="own"><p>work backlog</p></div>',
                 todolists,
                 '</div>',
                 '</body>',

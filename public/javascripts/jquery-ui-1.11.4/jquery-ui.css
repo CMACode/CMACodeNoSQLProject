@@ -844,10 +844,12 @@ body .ui-tooltip {
 	font-size: 1em;
 }
 .ui-widget-content {
-	border: 1px solid #dddddd;
-	background: #eeeeee url("images/ui-bg_highlight-soft_100_eeeeee_1x100.png") 50% top repeat-x;
+	border: 1px solid #F9F9F9;
+	background: #F9F9F9;
 	color: #333333;
 }
+
+div#dailyTodoList {}
 .ui-widget-content a {
 	color: #333333;
 }

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="stylesheets/style.css"/>
+        <link rel="stylesheet" href="javascripts/jquery-ui-1.11.4/jquery-ui.css" type="text/css">
+        <link rel="stylesheet" href="javascripts/jquery-ui-1.11.4/jquery-ui.css" type="text/css"/>
+        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script type="text/javascript" src="javascripts/jquery-2.1.4.js"></script>
+        <script type="text/javascript" src="javascripts/jquery-ui-1.11.4/jquery-ui.js"></script>
+        <script>
+//               $(function() {
+//                    $( ".ui-widget-content" ).draggable();
+//                });
+            $(function () {
+                $(".ui-widget-content2").draggable();
+            });
+            $(function () {
+                $(".doneTodos").accordion({
+                    collapsible: true,
+                    active: false
+                });
+            });
+
+
+            function moveToDailyList(obj) {
+                var toMove = document.getElementById(obj["id"]);
+                document.getElementById("dailyTodoList").appendChild(toMove);
+            }
+            ;
+
+            function checkedTodoFunction(checkbox) {
+                //'alert(obj["belongstolist"]);',
+                if (checkbox.checked)
+                {
+                    var toMove = document.getElementById(checkbox["name"]);//hier das p getten
+                    document.getElementById(checkbox["alt"]).appendChild(toMove); //Hier die doneliste zum einfügen finden
+//                alert(checkbox["id"]+"checked"); //hier collection updaten
+//                $(".ui-widget-content").load(location.href+" .ui-widget-content>*","");
+                    //console.log("----"+chckbxID)
+                    listAccessDBDriver.updateCheckbox('568e32db8b2fde265c6fd88c', "1", function (error) {
+                        console.log(error);
+                    });
+                } else {
+//                alert("unchecked"); //hier collection updaten
+                    listAccessDBDriver.updateCheckbox('568e32db8b2fde265c6fd88c', "0", function (error) {
+                        console.log(error);
+                    });
+//                 var toMove = document.getElementById(checkbox["name"]);//hier das p getten
+//                 document.getElementById(checkbox["alt"]).appendChild(toMove); //Hier die doneliste zum einfügen finden
+                }
+            };
+            var ListAccessDBDriver = require('./listAccessDBDriver').ListAccessDBDriver;
+            var listAccessDBDriver;
+            var objs;
+                listAccessDBDriver.findAll('list', function (error, doc) {
+        if (error) {
+            res.status(400).send(error);
+        } else if (res.statusCode === 200) {
+            objs =doc;
+        }
+            var todolists = '';
+            var todoListsForSelection = '<select name="list">';
+            for (var i in objs) {
+                // console.log(objs[i]['name']);
+
+                todolists += '<div id=' + objs[i]._id + ' class="ui-widget-content">' +
+                        '<p>' + objs[i]['name'] + '</p>';
+
+                var specificList = objs[i]['name'];
+                var objs2 = alltodos;
+                var doneTodosCounter = 0;
+                for (var j in objs2) {//erst ohne checkhaken adden
+//                    console.log("1 "+objs2[j]['belongstolist']);
+//                    console.log("2 "+specificList);
+                    if (objs2[j]['belongstolist'] === specificList) {
+                        if (objs2[j]['doneflag'] === '0') {
+                            todolists += '<div id=' + objs[i]._id + ' class="ui-widget-content2"><p id="' + objs2[j]['_id'] + '" ondblclick=moveToDailyList(this)><input type="checkbox" name="' + objs2[j]['_id'] + '" value="0N"  alt="' + objs2[j]["belongstolist"] + '" ';
+                            if (objs2[j]['doneflag'] === '1') {
+                                todolists += 'checked="checked" ';
+                            } else {
+                            }
+                            todolists += 'onchange="checkedTodoFunction(this)">';
+                            todolists += objs2[j]['name'] + '</p></div>';
+                        } else {
+                            doneTodosCounter++;
+                        }
+                    }
+                }
+                todolists += '<div id="' + objs[i].name + '" class=""><hr>' + doneTodosCounter + ' checked items</hr>';
+                for (var j in objs2) {//dann mit checkhaken
+                    if (objs2[j]['belongstolist'] === specificList) {
+                        if (objs2[j]['doneflag'] === '1') {
+                            todolists += '<p id="' + objs2[j]['_id'] + '" ondblclick=moveToDailyList(this)><input type="checkbox" name="' + objs2[j]['_id'] + '" value="0N" alt="' + objs2[j]["belongstolist"] + '" ';
+                            {
+                                todolists += 'checked="checked" ';
+                                todolists += 'onchange="checkedTodoFunction(this)">';
+                                todolists += objs2[j]['name'] + '</p>';
+                                todolists += document.body.appendChild(document.getElementById('+objs2[j]._id+'));
+                                todolists += console.log(document.getElementById('+objs2[j]._id+'));
+                            }
+                        }
+                    }
+
+
+                }
+                todolists += '</div>';
+                todolists += '<button  onclick="' + listAccessDBDriver.updateListType(objs[i].name, objs[i].type) + '">share list</button>';
+                todolists += '<p>' + objs[i]['type'] + '</p>';
+                todolists += '</div>';
+                todoListsForSelection += '<option>' + objs[i]['name'] + '</option></select>';
+            }
+            var dayname = new Array("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa");
+            var monthname = new Array("Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+            var datum = new Date();
+            datum = dayname[datum.getDay()] + ", " + datum.getDate() + "." + monthname[datum.getMonth()];
+            var chckbxID = '';
+            });
+        </script>
+    </head>
+    <body>
+        <div id="createtodoarea">
+            <form>
+                <input id="addtodotextfield" type="text" name="todoname" value=""/>
+                todoListsForSelection
+
+                <input type="submit" value="add Todo"/>
+            </form>
+        </div>
+        <div id="todolistsarea">
+            <div id="dailyTodoList" class="ui-widget-content"><p>'+datum+'</p></div>
+            <div id="privateBacklogList" class="own"><p>private backlog</p></div>
+            <div id="einkaufenList" class="own"><p>Einkaufen</p></div>
+            <div id="workBacklogList" class="own"><p>work backlog</p></div>
+            todolists
+        </div>
+    </body>
+</html>

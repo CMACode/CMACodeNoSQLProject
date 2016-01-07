@@ -4,5 +4,6 @@ db.list.insert({"name":"dailyTodo","belongstouser": "user1","type": "own"});
 
 db.todos.insert({"name":"work 1","belongstolist":"homework","doneflag":"1"});
 db.todos.insert({"name":"work 2","belongstolist":"homework","doneflag":"0"});
+db.todos.insert({"name":"work 3","belongstolist":"homework","doneflag":"0"});
 db.todos.insert({"name":"work 1","belongstolist":"dailyTodo","doneflag":"1"});
 db.todos.insert({"name":"work 2","belongstolist":"dailyTodo","doneflag":"0"});

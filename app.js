@@ -24,11 +24,20 @@ MongoClient.connect(mongoUrl, function (err, db) {
 //200
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/public/index.html');
+    
 });
 
+app.get('/allLists.html', function (req, res) {
+    res.sendFile(__dirname + '/public/allLists.html');
+    
+});
+app.get('/a', function (req, res) {
+    res.send({"test":"hello"});
+    
+});
 
 app.get('/getAllLists', function (req, res) {
-
+    
     var params = req.query;
     var todoname = params['todoname'];
     var list = params['list'];
@@ -62,18 +71,19 @@ app.get('/getAllLists', function (req, res) {
             for (var i in objs) {
                 // console.log(objs[i]['name']);
 
-                todolists += '<div id=' + objs[i]._id + ' class="ui-widget-content">' +
+                todolists += '<div id="" class="ui-widget-content">' +
                         '<p>' + objs[i]['name'] + '</p>';
-
                 var specificList = objs[i]['name'];
                 var objs2 = alltodos;
                 var doneTodosCounter =0;
-                for (var j in objs2) {//erst ohne checkhaken adden
+                todolists += '<div id="unchecked' + objs[i]._id + '" name="'+objs[i].name+'">';
+                for (var j in objs2) {//erst ohne checkhaken adden -------------------
 //                    console.log("1 "+objs2[j]['belongstolist']);
 //                    console.log("2 "+specificList);
                     if (objs2[j]['belongstolist'] === specificList) {
                         if (objs2[j]['doneflag'] === '0') {
-                            todolists += '<div id=' + objs[i]._id + ' class="ui-widget-content2"><p id="'+objs2[j]['_id']+'" ondblclick=moveToDailyList(this)><input type="checkbox" name="'+objs2[j]['_id']+'" value="0N"  alt="'+objs2[j]["belongstolist"]+'" ';
+                            //id=' + objs[i]._id + 
+                            todolists += '<div id="'+objs2[j]['_id']+'" class="ui-widget-content2"><p ondblclick=moveToDailyList(this)><input type="checkbox" name="'+objs2[j]['_id']+'" value="0N"  alt="'+objs[i]["_id"]+'" ';
                             if (objs2[j]['doneflag'] === '1') {
                                 todolists += 'checked="checked" ';
                             } else {
@@ -85,22 +95,26 @@ app.get('/getAllLists', function (req, res) {
                         }
                     }
                 }
-                todolists+='<div id="'+objs[i].name+'" class="doneTodos"><h1>'+doneTodosCounter+' checked items</h1>';
+                todolists+='</div>';
+                //id="'+objs[i].name+'"
+                todolists+='<div id="checked'+objs[i]._id+'" class=""><hr>'+doneTodosCounter+' checked items</hr>';
                 for (var j in objs2) {//dann mit checkhaken
                     if (objs2[j]['belongstolist'] === specificList) {
                         if (objs2[j]['doneflag'] === '1') {
-                            todolists += '<p id="'+objs2[j]['_id']+'" ondblclick=moveToDailyList(this)><input type="checkbox" name="'+objs2[j]['_id']+'" value="0N" alt="'+objs2[j]["belongstolist"]+'" ';
+                            //id="'+objs2[j]['_id']+'"
+                            todolists += '<p ondblclick=moveToDailyList(this)><input type="checkbox" name="'+objs2[j]['_id']+'" value="0N" alt="'+objs[i]["_id"]+'" ';
                             {
                                 todolists += 'checked="checked" ';
-                                todolists += 'onchange="checkedTodoFunction(this)">';
+                                todolists += 'onchange="checkedTodoFunction(this,)">';
                                 todolists += objs2[j]['name'] + '</p>';
                             }
                         }
                     }
                     
+                    
                 }
                 todolists+='</div>';
-                todolists+='<button>share list</button>';
+                todolists+='<button  onclick="'+  listAccessDBDriver.updateListType(objs[i]._id,objs[i].type)+'">share list</button>';
                 todolists+='<p>'+objs[i]['type']+'</p>';
                 todolists+='</div>';
                 todoListsForSelection += '<option>' + objs[i]['name'] + '</option>';
@@ -110,6 +124,7 @@ app.get('/getAllLists', function (req, res) {
             var datum = new Date();
             datum = dayname[datum.getDay()]+", "+datum.getDate()+"."+monthname[datum.getMonth()];
             var chckbxID='';
+            var runs= 0;
             var myhtml = ['<!DOCTYPE html>',
                 '<html>',
                 '<head>',
@@ -146,14 +161,19 @@ app.get('/getAllLists', function (req, res) {
                 //'alert(obj["belongstolist"]);',
                 'if (checkbox.checked)',
                 '{',
-                 'var toMove = document.getElementById(checkbox["name"]);',//hier das p getten
-                 'document.getElementById(checkbox["alt"]).appendChild(toMove);', //Hier die doneliste zum einfügen finden
-//                'alert(checkbox["id"]+"checked");', //hier collection updaten
+                 'var toMove = document.getElementById(checkbox["name"]);',//hier das p getten//                'alert(checkbox["id"]+"checked");', //hier collection updaten
 //                '$(".ui-widget-content").load(location.href+" .ui-widget-content>*","");',
-//                    listAccessDBDriver.updateCheckbox(chckbxID,"1"),
+                    //console.log("----"+chckbxID),
+                    
+                'document.getElementById("checked"+checkbox["alt"]).appendChild(toMove);', //Hier die doneliste zum einfügen finden
+
+                    listAccessDBDriver.updateCheckbox('568e32db8b2fde265c6fd88c',"1", function(error){console.log(error);}),
                 '}else{',
 //                'alert("unchecked");', //hier collection updaten
-//                    listAccessDBDriver.updateCheckbox(chckbxID,'0'),
+                    'var toMove = document.getElementById(checkbox["name"]);',//hier das p getten
+                 'document.getElementById("unchecked"+checkbox["alt"]).appendChild(toMove);', //Hier die doneliste zum einfügen finden
+                    listAccessDBDriver.updateCheckbox('568e32db8b2fde265c6fd88c',"0", function(error){console.log(error);}),
+//                 
                 '}',
                 '};',
                 '</script>',

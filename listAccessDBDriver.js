@@ -78,7 +78,7 @@ ListAccessDBDriver.prototype.save = function (collectionName, obj, callback) {
     });
 };
 
-//update a specific object TODOOOOOOOOOO
+//update a specific object
 ListAccessDBDriver.prototype.update = function (specificlist, todoname, callback) {
 //    console.log(specificlist+"... "+todoname);
     this.getCollection('todos', function (error, the_collection) { //A
@@ -95,13 +95,45 @@ ListAccessDBDriver.prototype.update = function (specificlist, todoname, callback
     });
 
 };
-ListAccessDBDriver.prototype.updateCheckbox = function (todoname, state, callback) {
-    console.log(todoname+"... "+state);
-    this.getCollection('todos', function (error, the_collection) { //A
+ListAccessDBDriver.prototype.updateListType = function (specificlist, type) {
+//    console.log(specificlist+"... "+type);
+    var t='own';
+    this.getCollection('list', function (error, the_collection) {
         if (error)
             callback(error);
         else {
-            the_collection.update({"name":todoname},{ $set: { "doneflag":state}});
+            the_collection.find({"_id":ObjectID(specificlist)}).toArray(function (err, docs) {
+                t=docs[0].type;
+            });
+            console.log("-->"+t);
+            if(t==='public'){
+                the_collection.update({"_id":ObjectID(specificlist)},{ $set: { "type":'own'}});
+            }else{
+                the_collection.update({"_id":ObjectID(specificlist)},{ $set: { "type":'public'}});
+            }
+            
+            
+            
+            //the_collection.update({"name":specificlist},{ $set: { "type":'own'}});
+//            var rslt = the_collection.find({"belongstolist":specificlist});
+//            console.log(""+rslt);
+//            the_collection.update({"name":specificlist},{ $set: { "type":'public'}});
+            
+            
+        }
+    });
+
+};
+ListAccessDBDriver.prototype.updateCheckbox = function (todoname, state, callback) {
+//    console.log(todoname+"... "+state);
+    this.getCollection('todos', function (error, the_collection) {
+        if (error)
+            callback(error);
+        else {
+            the_collection.update({"_id":ObjectID(todoname)},{ $set: { "doneflag":state}}, function(error, results) {
+                //console.log(error);
+                //console.log(results);
+            });
         }
     });
 
